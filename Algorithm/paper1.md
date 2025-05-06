@@ -1709,3 +1709,749 @@ It would contain:
 **Comparison with Fibonacci Heap:**
 - Binomial: Simpler implementation
 - Fibonacci: Better amortized performance for some operations
+
+# Algorithm Design (MCA-204) Exam Answers
+
+## Question 1
+
+### a) What is a circular linked list? What are the different operations performed on it, explain with an example.
+
+A circular linked list is a special type of linked list where the last node points back to the first node instead of pointing to NULL. This creates a circle-like structure, hence the name "circular" linked list.
+
+**Structure of a Circular Linked List:**
+- Each node contains data and a pointer to the next node
+- The last node's pointer points back to the first node
+- There is no NULL pointer in a circular linked list
+
+**Operations on Circular Linked Lists:**
+
+1. **Insertion:**
+   - **Insertion at the beginning:** To insert a new node at the beginning, we create a new node, make it point to the head node, and update the last node to point to this new node.
+   - **Insertion at the end:** Create a new node, make it point to the head node, update the previous last node to point to this new node.
+   - **Insertion at a specific position:** Traverse to the desired position, adjust the pointers to insert the new node.
+
+2. **Deletion:**
+   - **Deletion at the beginning:** Update the last node to point to the second node, and then remove the first node.
+   - **Deletion at the end:** Traverse to the second-last node, make it point to the head node, and delete the last node.
+   - **Deletion at a specific position:** Traverse to the node just before the target position, adjust the pointers, and delete the target node.
+
+3. **Traversal:**
+   - Start from any node and keep moving to the next node until we reach the starting node again.
+   - Unlike regular linked lists, we don't check for NULL to stop traversal.
+
+4. **Searching:**
+   - Start from the head node and search for the desired element until we either find it or return to the head node.
+
+**Example:**
+Let's say we have a circular linked list with nodes containing data: 10, 20, 30, 40.
+
+```
+  +---+    +---+    +---+    +---+
+  | 10|--->| 20|--->| 30|--->| 40|
+  +---+    +---+    +---+    +---+
+    ^                          |
+    |                          |
+    +--------------------------+
+```
+
+**Insertion Example (adding 25 after 20):**
+1. Create a new node with data 25
+2. Find the node with data 20
+3. Make the new node point to the node with data 30
+4. Make the node with data 20 point to the new node
+
+After insertion:
+```
+  +---+    +---+    +---+    +---+    +---+
+  | 10|--->| 20|--->| 25|--->| 30|--->| 40|
+  +---+    +---+    +---+    +---+    +---+
+    ^                                   |
+    |                                   |
+    +-----------------------------------+
+```
+
+**Advantages of Circular Linked Lists:**
+- No need to maintain a separate pointer to the last node for insertion at the end
+- Can traverse the entire list starting from any node
+- Useful in applications where we need to repeatedly go around a list (like round-robin scheduling)
+
+### b) Write and discuss various applications of stack and queue data structure in computer science.
+
+#### Stack Applications
+
+A stack is a linear data structure that follows the LIFO (Last In, First Out) principle. Here are its important applications:
+
+1. **Function Call Management (Call Stack):**
+   - When a function is called, its execution context is pushed onto the stack
+   - When the function completes, its context is popped off the stack
+   - This allows for proper function execution order and returning to the right place after function completion
+   - Recursion is implemented using the call stack
+
+2. **Expression Evaluation and Conversion:**
+   - Converting infix expressions to postfix or prefix notation
+   - Evaluating postfix or prefix expressions
+   - Checking for balanced parentheses in expressions
+   - Example: To evaluate "2 + (3 * 4)", we use stacks to handle operator precedence
+
+3. **Undo/Redo Operations:**
+   - Applications like text editors and graphic design software use stacks to implement undo/redo functionality
+   - Each action is pushed onto a stack, and when undoing, it's popped off
+
+4. **Browser History:**
+   - The back button in browsers uses a stack to remember previously visited pages
+   - Each time you visit a new page, it's pushed onto the stack
+   - When you click back, the current page is popped off
+
+5. **Syntax Parsing:**
+   - Compilers use stacks for syntax parsing and validation
+   - Used to check for balanced brackets, parentheses, and braces in code
+
+6. **Memory Management:**
+   - In programming languages, memory for local variables is organized in a stack called the "stack memory"
+   - Variables are pushed when created and popped when they go out of scope
+
+#### Queue Applications
+
+A queue is a linear data structure that follows the FIFO (First In, First Out) principle. Here are its important applications:
+
+1. **Process Scheduling in Operating Systems:**
+   - Ready queue for processes waiting to be executed
+   - I/O queue for processes waiting for I/O operations
+   - CPU scheduling algorithms like Round Robin use queues to manage processes
+
+2. **Breadth-First Search (BFS):**
+   - In graph algorithms, queues are used to implement BFS
+   - Helps in finding the shortest path in unweighted graphs
+   - Used in network broadcast algorithms
+
+3. **Printer Spooling:**
+   - Print jobs are processed in the order they are received
+   - Each print request joins the queue and is processed when it reaches the front
+
+4. **Message Buffers:**
+   - In message-oriented middleware, messages between applications are stored in queues
+   - Ensures messages are processed in the order they are received
+
+5. **Asynchronous Data Transfer:**
+   - Between different components in computer systems
+   - Between applications in distributed systems
+   - Message queues in event-driven programming
+
+6. **Task Scheduling:**
+   - Task schedulers use priority queues to determine the order of task execution
+   - Tasks with higher priority are dequeued and executed first
+
+7. **Customer Service Systems:**
+   - Call centers and customer service applications use queues to handle customer requests in the order they arrive
+
+8. **Cache Implementation:**
+   - Some cache replacement policies like FIFO use queue data structure
+
+9. **Real-time Systems:**
+   - Managing events and interrupts based on their arrival time
+   - Traffic management systems
+
+Both stacks and queues are fundamental data structures that form the building blocks for more complex data structures and algorithms in computer science. Understanding their applications helps in choosing the right data structure for specific problem-solving scenarios.
+
+## Question 2
+
+### a) Draw binary tree using following preorder and inorder traversing:
+Preorder - G H O A C K F P D E R H
+Inorder - O B K C F A G P E D H R
+
+To construct a binary tree from preorder and inorder traversals, we follow these steps:
+
+1. The first element in preorder is always the root of the tree (G in this case)
+2. Find this root element in the inorder traversal
+3. Elements to the left of the root in inorder are in the left subtree
+4. Elements to the right of the root in inorder are in the right subtree
+5. Recursively apply this process to build the left and right subtrees
+
+Let's construct the tree step by step:
+
+1. Preorder starts with G, so G is the root
+2. In inorder, G appears after O B K C F A, so these elements form the left subtree
+3. Elements P E D H R form the right subtree
+
+For the left subtree:
+- The next element in preorder is H, so H is the root of the left subtree
+- In inorder, H doesn't appear in the left subtree portion (O B K C F A)
+- This suggests the preorder might have an error or the tree has duplicate values
+
+Let me try to construct based on the given sequences:
+
+Root: G
+- Left subtree: O B K C F A
+- Right subtree: P E D H R
+
+The next element in preorder is H, which should be the root of G's left subtree.
+But H doesn't appear in the left subtree portion of inorder.
+
+Given this inconsistency, the most likely tree structure based on the provided traversals would be:
+
+```
+        G
+       / \
+      H   P
+     /     \
+    O       E
+     \     / \
+      B   D   R
+       \     /
+        K   H
+       / \
+      C   F
+         /
+        A
+```
+
+Note: This is my best interpretation given the traversals provided, but there may be inconsistencies in the original data.
+
+### b) What are the applications of tree data structure? Explain.
+
+Trees are hierarchical data structures that are widely used in various applications in computer science. Here are the key applications of tree data structures:
+
+#### 1. File Systems
+Operating systems use tree structures to organize files and directories. The root directory serves as the tree's root, with subdirectories and files as child nodes. This hierarchical organization makes it easy to locate, retrieve, and manage files.
+
+#### 2. Database Systems
+- **B-trees and B+ trees**: Used in database management systems and file systems for efficient storage, retrieval, and maintenance of data. They help optimize disk accesses and maintain sorted data.
+- **Decision trees**: Used in data mining for classification and prediction.
+
+#### 3. Compilers
+- **Abstract Syntax Trees (AST)**: Represent the structure of program code.
+- **Parse Trees**: Used in compilers to analyze the grammatical structure of program code.
+- **Expression Trees**: Represent mathematical expressions for evaluation.
+
+#### 4. Network Routing
+- **Spanning Trees**: Used in network routing protocols to avoid loops in network topologies.
+- **Trie structures**: Used for IP routing to find the longest prefix match.
+
+#### 5. Artificial Intelligence
+- **Game Trees**: Represent possible moves in games like chess and tic-tac-toe (Minimax algorithm).
+- **Decision Trees**: Used for decision making and classification problems.
+- **Hierarchical Clustering**: Groups similar data points into a tree structure.
+
+#### 6. Graphics and Multimedia
+- **Scene Graphs**: Represent 3D scenes in graphics applications.
+- **Quad-trees and Oct-trees**: Used for spatial partitioning in graphics and game development for collision detection and rendering optimization.
+- **BSP Trees**: Used in 3D computer graphics to determine visible surfaces.
+
+#### 7. Search Algorithms
+- **Binary Search Trees**: Allow quick lookup, insertion, and deletion of items.
+- **AVL Trees** and **Red-Black Trees**: Self-balancing BSTs that maintain O(log n) height.
+- **Tries**: Efficient for string searching and auto-completion features.
+
+#### 8. Organizational Structures
+- **Organization Charts**: Represent hierarchical structures in companies.
+- **Family Trees**: Represent genealogical relationships.
+
+#### 9. XML/HTML DOM
+Web browsers use trees to represent the Document Object Model (DOM) for HTML/XML documents, allowing for efficient rendering and manipulation of web pages.
+
+#### 10. Computational Biology
+- **Phylogenetic Trees**: Represent evolutionary relationships among biological species.
+- **RNA Secondary Structure Prediction**: Uses tree structures to predict folding patterns.
+
+#### 11. Compression Algorithms
+- **Huffman Coding Trees**: Used in data compression algorithms to assign variable-length codes to characters.
+
+#### 12. Machine Learning
+- **Random Forests**: Ensemble learning methods that use multiple decision trees.
+- **Boosting Trees**: Like XGBoost, use trees as base learners.
+
+#### 13. Priority Queues
+- **Heap Trees**: Implement priority queues for scheduling processes, handling events, and implementing algorithms like Dijkstra's shortest path.
+
+#### 14. Computer Networks
+- **Multicast Trees**: For efficient data distribution in networks.
+- **Network Topology Representation**: To visualize and analyze network structures.
+
+Trees are versatile data structures that offer efficient solutions to many computational problems. Their hierarchical nature makes them ideal for representing relationships, optimizing searches, and organizing data in a way that reflects real-world hierarchies.
+
+### c) What is hashing? What are the qualities of a good hash function? Explain any two hash function in detail.
+
+#### What is Hashing?
+
+Hashing is a technique that maps data of arbitrary size to fixed-size values. The function that performs this mapping is called a hash function. Hashing is primarily used for:
+
+1. **Fast data retrieval**: Allows O(1) average-case time complexity for lookups
+2. **Data integrity verification**: Can detect if data has been modified
+3. **Password storage**: Securely storing passwords by saving only their hash values
+4. **Implementing associative arrays/dictionaries**: Key-value pair storage
+5. **Caching**: Quick lookup of previously computed results
+
+In a hash table, data is stored in an array-like data structure. The hash function converts a key into an index in this array. This allows for quick insertion, deletion, and retrieval of data.
+
+#### Qualities of a Good Hash Function
+
+1. **Deterministic**: The same input should always produce the same hash value.
+
+2. **Uniform Distribution**: Hash values should be evenly distributed across the hash table to minimize collisions. A collision occurs when two different inputs produce the same hash value.
+
+3. **Efficiency**: The hash function should be computationally efficient and quick to calculate.
+
+4. **Avalanche Effect**: Small changes in the input should result in significant changes in the hash value. This helps in distributing the keys uniformly.
+
+5. **Non-Invertible**: It should be practically impossible to derive the original input from its hash value (one-way function). This is especially important for security applications.
+
+6. **Fixed Output Size**: The hash function should produce a fixed-size output regardless of the input size.
+
+7. **Minimizes Collisions**: While collisions cannot be completely eliminated, a good hash function minimizes their occurrence.
+
+8. **Handles Different Data Types**: Should work well for various types of input data (strings, numbers, objects, etc.).
+
+#### Two Hash Functions in Detail
+
+##### 1. Division Method
+
+The division method is one of the simplest hash functions.
+
+**Formula**: h(k) = k mod m
+
+Where:
+- k is the key to be hashed
+- m is the size of the hash table (usually a prime number)
+- h(k) is the resulting hash value
+
+**Working Process**:
+1. Take the key k
+2. Divide it by the hash table size m
+3. Use the remainder as the hash value
+
+**Example**:
+- If we have a hash table of size 11 (a prime number)
+- And we want to hash the key 42
+- h(42) = 42 mod 11 = 9
+- So the key 42 would be stored at index 9 in the hash table
+
+**Advantages**:
+- Simple and fast to compute
+- Works well when the table size is a prime number not close to a power of 2 or 10
+
+**Disadvantages**:
+- Not very effective if there are patterns in the keys
+- If keys tend to share common factors with m, collisions will be more frequent
+- Not suitable for strings or complex objects without preprocessing
+
+**Applications**:
+- Simple hash tables with numeric keys
+- When computational efficiency is a priority
+- In educational contexts to demonstrate hashing concepts
+
+##### 2. Multiplication Method
+
+The multiplication method uses multiplication and modular arithmetic to generate hash values.
+
+**Formula**: h(k) = ⌊m × (k × A mod 1)⌋
+
+Where:
+- k is the key to be hashed
+- m is the size of the hash table
+- A is a constant value between 0 and 1 (often A = (√5 - 1)/2 ≈ 0.618033988749895, known as the golden ratio)
+- (k × A mod 1) gives the fractional part of k × A
+- ⌊ ⌋ represents the floor function
+
+**Working Process**:
+1. Multiply the key k by the constant A
+2. Take the fractional part of the result (k × A mod 1)
+3. Multiply by the table size m
+4. Take the floor of the result to get an integer index
+
+**Example**:
+- If we have a hash table of size 10
+- We want to hash the key 123
+- Using A = 0.618033988749895
+- k × A = 123 × 0.618033988749895 = 76.01818061823609
+- k × A mod 1 = 0.01818061823609 (fractional part)
+- m × (k × A mod 1) = 10 × 0.01818061823609 = 0.1818061823609
+- ⌊m × (k × A mod 1)⌋ = ⌊0.1818061823609⌋ = 0
+- So the key 123 would be stored at index 0
+
+**Advantages**:
+- Less sensitive to patterns in the input data
+- Works well with any table size
+- Better distribution of hash values compared to division method
+
+**Disadvantages**:
+- Slightly more computationally intensive than the division method
+- Selection of an appropriate value for A is crucial for performance
+- Still needs additional techniques for non-numeric data
+
+**Applications**:
+- General-purpose hash tables
+- When input keys may have patterns
+- Hash tables where the size changes dynamically
+
+#### Universal Hashing
+
+For more robust applications, universal hashing is often used. It involves selecting a hash function randomly from a family of hash functions at runtime. This randomization helps prevent attackers from constructing inputs that would cause many collisions, which could lead to worst-case performance.
+
+#### Handling Collisions
+
+Even with good hash functions, collisions can occur. Two main strategies for handling collisions are:
+
+1. **Chaining**: Each slot in the hash table points to a linked list of entries that hash to the same value.
+2. **Open Addressing**: When a collision occurs, the algorithm searches for another empty slot according to a probing sequence (linear probing, quadratic probing, double hashing).
+
+In conclusion, hashing is a powerful technique for implementing efficient data structures like hash tables. The choice of hash function significantly impacts performance and must be selected based on the specific requirements of the application and the nature of the input data.
+
+## Question 3
+
+### a) Sort the following using quick-sort Algorithm: (5, 8, 9, 2, 10, 1, 45, 32)
+
+Quick-sort is a divide-and-conquer sorting algorithm that works by selecting a 'pivot' element from the array and partitioning the other elements into two sub-arrays according to whether they are less than or greater than the pivot. The sub-arrays are then sorted recursively.
+
+Let's sort the given array step by step using the quick-sort algorithm:
+
+**Array to be sorted**: [5, 8, 9, 2, 10, 1, 45, 32]
+
+**First Iteration**:
+1. Select the first element as the pivot: 5
+2. Partition the array:
+   - Elements less than 5: [2, 1]
+   - Elements greater than or equal to 5: [8, 9, 10, 45, 32]
+3. After partitioning: [2, 1, 5, 8, 9, 10, 45, 32]
+4. Now we recursively apply quick-sort to the sub-arrays [2, 1] and [8, 9, 10, 45, 32]
+
+**Sort [2, 1]**:
+1. Select pivot: 2
+2. Partition: 
+   - Elements less than 2: [1]
+   - Elements greater than or equal to 2: []
+3. After partitioning: [1, 2]
+4. Both sub-arrays have 0 or 1 elements, so they are sorted
+
+**Sort [8, 9, 10, 45, 32]**:
+1. Select pivot: 8
+2. Partition:
+   - Elements less than 8: []
+   - Elements greater than or equal to 8: [9, 10, 45, 32]
+3. After partitioning: [8, 9, 10, 45, 32]
+4. Recursively sort [9, 10, 45, 32]
+
+**Sort [9, 10, 45, 32]**:
+1. Select pivot: 9
+2. Partition:
+   - Elements less than 9: []
+   - Elements greater than or equal to 9: [10, 45, 32]
+3. After partitioning: [9, 10, 45, 32]
+4. Recursively sort [10, 45, 32]
+
+**Sort [10, 45, 32]**:
+1. Select pivot: 10
+2. Partition:
+   - Elements less than 10: []
+   - Elements greater than or equal to 10: [45, 32]
+3. After partitioning: [10, 45, 32]
+4. Recursively sort [45, 32]
+
+**Sort [45, 32]**:
+1. Select pivot: 45
+2. Partition:
+   - Elements less than 45: [32]
+   - Elements greater than or equal to 45: []
+3. After partitioning: [32, 45]
+4. Both sub-arrays have 0 or 1 elements, so they are sorted
+
+**Combine all the sorted sub-arrays**:
+- Sub-array 1: [1, 2]
+- Pivot: 5
+- Sub-array 2: [8, 9, 10, 32, 45]
+
+**Final sorted array**: [1, 2, 5, 8, 9, 10, 32, 45]
+
+**Algorithm Explanation:**
+
+Quick-sort follows these key steps:
+
+1. **Choose a pivot**: Select an element from the array. Common strategies include:
+   - First element (used in our example)
+   - Last element
+   - Middle element
+   - Random element
+   - Median of three (first, middle, last)
+
+2. **Partition**: Rearrange the array so that:
+   - All elements less than the pivot come before it
+   - All elements greater than the pivot come after it
+   - The pivot is in its final sorted position
+
+3. **Recursive sorting**: Recursively apply the above steps to the sub-arrays formed by the partition until each sub-array has 0 or 1 elements.
+
+**Time Complexity**:
+- Best and Average case: O(n log n)
+- Worst case: O(n²), which occurs when the array is already sorted and we choose the first or last element as the pivot
+
+**Space Complexity**:
+- O(log n) for the recursive call stack in the best case
+- O(n) in the worst case
+
+**Advantages of Quick-sort**:
+- In-place sorting (requires minimal additional memory)
+- Efficient for large datasets
+- Good cache locality
+- Easily parallelizable
+
+**Disadvantages**:
+- Unstable sorting algorithm (equal elements may change their relative order)
+- Worst-case time complexity is O(n²)
+- Recursive, which can lead to stack overflow for very large arrays
+
+Quick-sort is one of the most efficient sorting algorithms and is widely used in practice. The choice of pivot and implementation details can significantly affect its performance.
+
+## Question 4
+
+### a) Solve any problem using backtracking.
+
+#### The N-Queens Problem Using Backtracking
+
+**Problem Statement:**
+The N-Queens problem asks us to place N chess queens on an N×N chessboard so that no two queens threaten each other. This means no two queens can share the same row, column, or diagonal.
+
+For this example, I'll solve the 4-Queens problem (placing 4 queens on a 4×4 chessboard).
+
+**Understanding Backtracking:**
+Backtracking is an algorithmic technique that builds a solution incrementally, abandoning a partial solution ("backtracking") as soon as it determines that the solution cannot be completed to a valid one.
+
+**Approach for Solving N-Queens:**
+1. Start in the leftmost column
+2. Try placing a queen in each row of the current column
+3. If a queen can be placed safely, mark that position
+4. Recursively check if this leads to a solution for the rest of the columns
+5. If not, remove the queen (backtrack) and try the next row
+6. If all rows are tried and no solution is found, return false to trigger backtracking
+
+**Let's solve the 4-Queens problem step by step:**
+
+First, we'll represent the chessboard as a 4×4 matrix where:
+- 0 represents an empty cell
+- 1 represents a cell with a queen
+
+**Step 1:** Start with an empty board:
+```
+0 0 0 0
+0 0 0 0
+0 0 0 0
+0 0 0 0
+```
+
+**Step 2:** Place a queen in the first row of the first column:
+```
+1 0 0 0
+0 0 0 0
+0 0 0 0
+0 0 0 0
+```
+
+**Step 3:** Try to place a queen in the second column. The first and second rows are under attack, so try the third row:
+```
+1 0 0 0
+0 0 0 0
+0 1 0 0
+0 0 0 0
+```
+
+**Step 4:** Try to place a queen in the third column. The first, second, and third rows are under attack, so try the fourth row:
+```
+1 0 0 0
+0 0 0 0
+0 1 0 0
+0 0 1 0
+```
+
+**Step 5:** Try to place a queen in the fourth column. All rows are under attack, so no valid placement is possible.
+
+**Step 6:** Backtrack to the third column and remove the queen from the fourth row.
+
+**Step 7:** No other valid positions in the third column, so backtrack to the second column.
+
+**Step 8:** Remove the queen from the third row of the second column and try the fourth row:
+```
+1 0 0 0
+0 0 0 0
+0 0 0 0
+0 1 0 0
+```
+
+**Step 9:** Try to place a queen in the third column. The first and fourth rows are under attack, so try the second row:
+```
+1 0 0 0
+0 0 1 0
+0 0 0 0
+0 1 0 0
+```
+
+**Step 10:** Try to place a queen in the fourth column. Only the third row is available:
+```
+1 0 0 0
+0 0 1 0
+0 0 0 1
+0 1 0 0
+```
+
+**Solution found!** This is a valid placement of 4 queens on a 4×4 chessboard.
+
+**Python Implementation of the N-Queens Solution:**
+
+Here's how we would implement this solution in Python:
+
+```python
+def solve_n_queens(n):
+    """
+    Solve the N-Queens problem and return a solution.
+    
+    Args:
+        n: The size of the board and number of queens
+    
+    Returns:
+        A solution board where 1s represent queens
+    """
+    # Initialize the board with zeros
+    board = [[0 for _ in range(n)] for _ in range(n)]
+    
+    if not solve_n_queens_util(board, 0, n):
+        print("No solution exists")
+        return None
+    
+    return board
+
+def solve_n_queens_util(board, col, n):
+    """
+    Utility function to solve N-Queens problem recursively.
+    
+    Args:
+        board: The chessboard represented as a matrix
+        col: Current column being processed
+        n: The size of the board
+    
+    Returns:
+        True if a solution is found, False otherwise
+    """
+    # Base case: If all queens are placed, return True
+    if col >= n:
+        return True
+    
+    # Try placing a queen in each row of the current column
+    for row in range(n):
+        if is_safe(board, row, col, n):
+            # Place the queen
+            board[row][col] = 1
+            
+            # Recursively try to place the rest of the queens
+            if solve_n_queens_util(board, col + 1, n):
+                return True
+            
+            # If placing queen at board[row][col] doesn't lead to a solution,
+            # backtrack - remove the queen from board[row][col]
+            board[row][col] = 0
+    
+    # If no row works, return False to trigger backtracking
+    return False
+
+def is_safe(board, row, col, n):
+    """
+    Check if it's safe to place a queen at board[row][col].
+    
+    Args:
+        board: The chessboard represented as a matrix
+        row: Row to check
+        col: Column to check
+        n: The size of the board
+    
+    Returns:
+        True if it's safe to place a queen, False otherwise
+    """
+    # Check the left side of this row
+    for i in range(col):
+        if board[row][i] == 1:
+            return False
+    
+    # Check upper diagonal on left side
+    for i, j in zip(range(row, -1, -1), range(col, -1, -1)):
+        if board[i][j] == 1:
+            return False
+    
+    # Check lower diagonal on left side
+    for i, j in zip(range(row, n), range(col, -1, -1)):
+        if board[i][j] == 1:
+            return False
+    
+    return True
+
+# Function to print the board
+def print_board(board):
+    for row in board:
+        print(" ".join(str(cell) for cell in row))
+
+# Solve 4-Queens problem
+solution = solve_n_queens(4)
+if solution:
+    print_board(solution)
+```
+
+This solution demonstrates the backtracking technique:
+1. We try to place queens column by column
+2. For each column, we try each row
+3. If a placement is unsafe, we immediately reject it
+4. If a placement is safe, we recursively try to place queens in subsequent columns
+5. If we can't place a queen in a column, we backtrack to the previous column and try a different placement
+6. We continue this process until we find a solution or exhaust all possibilities
+
+**Applications of Backtracking:**
+1. Puzzles like Sudoku, Crosswords, and N-Queens
+2. Graph problems like Hamiltonian Path and Graph Coloring
+3. Combinatorial problems like Subset Sum and Knapsack
+4. Constraint satisfaction problems
+5. Parsing expressions in compilers
+6. AI applications like game playing and constraint satisfaction
+
+Backtracking is powerful for problems that require exploring multiple possibilities before finding a solution. The key insight is that it allows us to efficiently prune large portions of the search space as soon as we determine they cannot lead to a valid solution.
+
+### b) What do you understand by NP-hard and NP-complete problems?
+
+#### Understanding Computational Complexity: NP-hard and NP-complete Problems
+
+In computer science, problems are classified based on their computational complexity—how difficult they are to solve as the input size grows. NP-hard and NP-complete are important classifications for particularly challenging problems. Let's break them down in simple terms:
+
+#### Basic Complexity Classes
+
+Before diving into NP-hard and NP-complete, let's understand some fundamental complexity classes:
+
+1. **P (Polynomial Time)**:
+   - Problems that can be solved in polynomial time (O(n^k) where n is the input size and k is a constant)
+   - Examples: Sorting arrays, finding the shortest path in a graph (Dijkstra's algorithm), searching in binary search trees
+
+2. **NP (Non-deterministic Polynomial Time)**:
+   - Problems where a proposed solution can be verified in polynomial time
+   - All P problems are in NP (if you can solve it quickly, you can verify it quickly too)
+   - Examples: The traveling salesman problem, Boolean satisfiability problem (SAT), graph coloring
+
+#### NP-hard Problems
+
+**Definition**: A problem is NP-hard if every problem in NP can be reduced to it in polynomial time.
+
+In simpler terms:
+- NP-hard problems are at least as hard as the hardest problems in NP
+- If you could solve an NP-hard problem efficiently (in polynomial time), you could solve all NP problems efficiently
+- NP-hard problems might not be in NP themselves (they might be even harder)
+
+**Key characteristics**:
+1. They represent some of the most challenging computational problems
+2. No polynomial-time algorithms are known for NP-hard problems
+3. They often involve optimization or finding the best solution among many possibilities
+
+**Examples of NP-hard problems**:
+1. **Traveling Salesman Problem (TSP)**: Finding the shortest possible route that visits each city exactly once and returns to the origin city
+2. **Knapsack Problem**: Maximizing the value of items in a knapsack without exceeding its weight capacity
+3. **Graph Coloring**: Assigning colors to vertices of a graph such that no two adjacent vertices have the same color
+4. **Halting Problem**: Determining whether a given program will finish running or continue indefinitely (this is not in NP, but is NP-hard)
+
+#### NP-complete Problems
+
+**Definition**: A problem is NP-complete if:
+1. It is in NP (solutions can be verified in polynomial time)
+2. It is NP-hard (all problems in NP can be reduced to it in polynomial time)
+
+In simpler terms:
+- NP-complete problems are the hardest problems in
